@@ -1,0 +1,49 @@
+MODULE main
+VAR
+  state : {IDLE, PROCESSING, HW_ERROR};
+  data_ready : boolean;
+  system_active : boolean;
+  incoming_query_valid : boolean;
+  action : {execute_cycle, shutdown, none};
+
+ASSIGN
+  -- Synthesized from assignments in __init__ (lines 5-6 in host_controller.py and 10-11 in accelerator.py)
+  init(state) := IDLE;
+  init(data_ready) := FALSE;
+  init(system_active) := FALSE;
+
+  next(state) := case
+    -- Synthesized from transition_type: "function_call", "function": "self.fpga.dispatch_query", "args": ["incoming_query_valid"]
+    -- mapping to condition: ["self.state == AcceleratorState.IDLE", "valid_payload"]
+    action = execute_cycle & state = IDLE & incoming_query_valid : PROCESSING;
+    
+    -- Synthesized from transition_type: "function_call", "function": "self.fpga.dispatch_query", "args": ["incoming_query_valid"]
+    -- mapping to condition: ["self.state == AcceleratorState.IDLE", "not (valid_payload)"]
+    action = execute_cycle & state = IDLE & !incoming_query_valid : HW_ERROR;
+    
+    -- Synthesized from transition_type: "function_call", "function": "self.fpga.reset", "args": []
+    action = shutdown : IDLE;
+    TRUE : state;
+  esac;
+
+  next(data_ready) := case
+    -- Mapped via self.fpga.dispatch_query argument substitution
+    action = execute_cycle & state = IDLE & incoming_query_valid : TRUE;
+    action = execute_cycle & state = IDLE & !incoming_query_valid : FALSE;
+    
+    -- Mapped via self.fpga.reset() invocation
+    action = shutdown : FALSE;
+    TRUE : data_ready;
+  esac;
+
+  next(system_active) := case
+    -- Synthesized from transition_type: "assignment", "variable": "self.system_active", "next_value": "True", "line": 9
+    action = execute_cycle : TRUE;
+    
+    -- Synthesized from transition_type: "assignment", "variable": "self.system_active", "next_value": "False", "line": 15
+    action = shutdown : FALSE;
+    TRUE : system_active;
+  esac;
+
+CTLSPEC
+  AG !(state = HW_ERROR)

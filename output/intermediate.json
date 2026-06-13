@@ -1,0 +1,128 @@
+[
+  {
+    "transition_type": "assignment",
+    "variable": "self.state",
+    "next_value": "AcceleratorState.IDLE",
+    "line": 10,
+    "conditions": [],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.data_ready",
+    "next_value": "False",
+    "line": 11,
+    "conditions": [],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.state",
+    "next_value": "AcceleratorState.PROCESSING",
+    "line": 16,
+    "conditions": [
+      "self.state == AcceleratorState.IDLE",
+      "valid_payload"
+    ],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.data_ready",
+    "next_value": "True",
+    "line": 17,
+    "conditions": [
+      "self.state == AcceleratorState.IDLE",
+      "valid_payload"
+    ],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.state",
+    "next_value": "AcceleratorState.HW_ERROR",
+    "line": 19,
+    "conditions": [
+      "self.state == AcceleratorState.IDLE",
+      "not (valid_payload)"
+    ],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.data_ready",
+    "next_value": "False",
+    "line": 20,
+    "conditions": [
+      "self.state == AcceleratorState.IDLE",
+      "not (valid_payload)"
+    ],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.state",
+    "next_value": "AcceleratorState.IDLE",
+    "line": 23,
+    "conditions": [],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.data_ready",
+    "next_value": "False",
+    "line": 24,
+    "conditions": [],
+    "file": "accelerator.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.fpga",
+    "next_value": "accelerator",
+    "line": 5,
+    "conditions": [],
+    "file": "host_controller.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.system_active",
+    "next_value": "False",
+    "line": 6,
+    "conditions": [],
+    "file": "host_controller.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.system_active",
+    "next_value": "True",
+    "line": 9,
+    "conditions": [],
+    "file": "host_controller.py"
+  },
+  {
+    "transition_type": "function_call",
+    "function": "self.fpga.dispatch_query",
+    "args": [
+      "incoming_query_valid"
+    ],
+    "line": 10,
+    "conditions": [],
+    "file": "host_controller.py"
+  },
+  {
+    "transition_type": "function_call",
+    "function": "self.fpga.reset",
+    "args": [],
+    "line": 14,
+    "conditions": [],
+    "file": "host_controller.py"
+  },
+  {
+    "transition_type": "assignment",
+    "variable": "self.system_active",
+    "next_value": "False",
+    "line": 15,
+    "conditions": [],
+    "file": "host_controller.py"
+  }
+]

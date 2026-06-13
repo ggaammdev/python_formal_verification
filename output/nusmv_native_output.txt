@@ -1,0 +1,24 @@
+*** This is NuSMV 2.7.1 (compiled on (unknown))
+*** Enabled addons are: compass
+*** For more information on NuSMV see <http://nusmv.fbk.eu>
+*** or email to <nusmv-users@list.fbk.eu>.
+*** Please report bugs to <Please report bugs to <nusmv-users@fbk.eu>>
+
+*** Copyright (c) 2010-2026, Fondazione Bruno Kessler
+
+*** This version of NuSMV is linked to the CUDD library version 2.4.1
+*** Copyright (c) 1995-2004, Regents of the University of Colorado
+
+-- specification AG !(state = HW_ERROR)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 1.1 <-
+    state = IDLE
+    data_ready = FALSE
+    system_active = FALSE
+    incoming_query_valid = FALSE
+    action = execute_cycle
+  -> State: 1.2 <-
+    state = HW_ERROR
+    system_active = TRUE
