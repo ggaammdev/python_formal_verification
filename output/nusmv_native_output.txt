@@ -22,3 +22,22 @@ Trace Type: Counterexample
   -> State: 1.2 <-
     state = HW_ERROR
     system_active = TRUE
+-- specification AG ((action = execute_cycle & incoming_query_valid) -> AF state = PROCESSING)  is false
+-- as demonstrated by the following execution sequence
+Trace Description: CTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 2.1 <-
+    state = IDLE
+    data_ready = FALSE
+    system_active = FALSE
+    incoming_query_valid = FALSE
+    action = execute_cycle
+  -- Loop starts here
+  -> State: 2.2 <-
+    state = HW_ERROR
+    system_active = TRUE
+    incoming_query_valid = TRUE
+  -> State: 2.3 <-
+-- specification AG (state = HW_ERROR -> EF state = IDLE)  is true
+-- specification AG !(state = IDLE & data_ready = TRUE)  is true
+-- specification AG (state = PROCESSING -> data_ready = TRUE)  is true

@@ -11,9 +11,14 @@ You are equipped with terminal/shell execution and file system tools. You MUST c
 
 ## STEP 2: SMV Synthesis
 1. Analyze the variables and transition logic from the JSON.
-2. Generate the equivalent `MODULE main` in native SMV syntax. Map Python class variables (e.g., `self.state`) to SMV states and apply `LTLSPEC`/`CTLSPEC` safety constraints.
-3. **Include Comments:** Above every SMV transition, explicitly write SMV comments (`--`) detailing exactly how the line maps back to the JSON payload (such as citing the `"transition_type"`, `"function_call"`, or `"conditions"` list used).
-4. **Action:** Save this compiled SMV logic to `output/generated_model.smv`.
+2. Generate the equivalent `MODULE main` in native SMV syntax. Map Python class variables (e.g., `self.state`) to SMV states. 
+3. **Generate Comprehensive Rules:** At the bottom of the file, do not just check for a single error state. You MUST generate a comprehensive suite of `CTLSPEC` rules that evaluate:
+   - **Safety:** (e.g. `AG !(state = HW_ERROR)`)
+   - **Implication / Data Integrity:** (e.g. ensuring flags are consistent with states)
+   - **Liveness:** (e.g. ensuring valid actions eventually reach target states using `AF`)
+   - **Recovery:** (e.g. ensuring error states can eventually return to idle using `EF`)
+4. **Include Comments:** Above every SMV transition, explicitly write SMV comments (`--`) detailing exactly how the line maps back to the JSON payload (such as citing the `"transition_type"`, `"function_call"`, or `"conditions"` list used).
+5. **Action:** Save this compiled SMV logic to `output/generated_model.smv`.
 
 ## STEP 3: Verification Execution
 **Action:** Use your terminal to run: `NuSMV output/generated_model.smv`. Capture the raw standard output.

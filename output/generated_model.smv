@@ -45,5 +45,17 @@ ASSIGN
     TRUE : system_active;
   esac;
 
-CTLSPEC
-  AG !(state = HW_ERROR)
+-- RULE 1: Safety (The original rule)
+CTLSPEC AG !(state = HW_ERROR)
+
+-- RULE 2: Safety (data_ready should never be True while IDLE)
+CTLSPEC AG !(state = IDLE & data_ready = TRUE)
+
+-- RULE 3: Implication (If PROCESSING, data_ready MUST be True)
+CTLSPEC AG (state = PROCESSING -> data_ready = TRUE)
+
+-- RULE 4: Liveness (A valid query MUST eventually lead to PROCESSING)
+CTLSPEC AG ((action = execute_cycle & incoming_query_valid) -> AF (state = PROCESSING))
+
+-- RULE 5: Recovery (If in HW_ERROR, there exists a path back to IDLE via shutdown)
+CTLSPEC AG (state = HW_ERROR -> EF (state = IDLE))
